@@ -2,24 +2,21 @@ import connectDB from "@/lib/db";
 import { Post } from "@/models/post.model";
 import { NextRequest, NextResponse } from "next/server";
 
-export const POST = async (
-  req: NextRequest,
-  { params }: { params: { postId: string } }
-) => {
+// Dislike (remove like) from post
+export const POST = async (req: NextRequest, context: { params: { postId: string } }) => {
   try {
     await connectDB();
+    const { postId } = await context.params;  // await here
+    const userId = await req.json();          // read userId from request body
 
-    const { userId } = await req.json();
-    const post = await Post.findById(params.postId);
-
-    if (!post) {
-      return NextResponse.json({ error: "Post not found" }, { status: 404 });
-    }
+    const post = await Post.findById(postId);
+    if (!post) return NextResponse.json({ error: "Post not found." }, { status: 404 });
 
     await post.updateOne({ $pull: { likes: userId } });
 
     return NextResponse.json({ message: "Post disliked successfully." });
-  } catch {
+  } catch (error) {
     return NextResponse.json({ error: "An error occurred." }, { status: 500 });
   }
 };
+

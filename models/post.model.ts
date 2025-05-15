@@ -1,18 +1,17 @@
-import mongoose, { Document, Model } from "mongoose";
+import mongoose, { Schema, model, Types, Model } from "mongoose";
 import { IUser } from "./user.model";
-import { IComment } from "./comment.model";
 
 export interface IPost{
+    _id: Types.ObjectId | string;
     description:string,
     user:IUser,
     imageUrl?:string,
     likes?:string[],
-    comments?: mongoose.Types.ObjectId[],
+    comments?:mongoose.Types.ObjectId[]
 }
 export interface IPostDocument extends IPost, Document{
-    _id: mongoose.Types.ObjectId,
-    createdAt:Date,
-    updatedAt:Date
+    createdAt:Date;
+    updatedAt:Date;
 }
 const postSchema = new mongoose.Schema<IPostDocument>({
     description:{
@@ -39,14 +38,14 @@ const postSchema = new mongoose.Schema<IPostDocument>({
     },
     imageUrl:{
         type:String,
-        default:""
+        default:"",
     },
     likes:{
         type:[String]
     },
     comments:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"Comment"
+        ref:'Comment'
     }]
-},{timestamps:true})
-export const Post : Model<IPostDocument> = mongoose.models?.Post || mongoose.model<IPostDocument>("Post",postSchema);
+},{timestamps:true});
+export const Post : Model<IPostDocument> = mongoose.models?.Post || mongoose.model<IPostDocument>("Post", postSchema);
