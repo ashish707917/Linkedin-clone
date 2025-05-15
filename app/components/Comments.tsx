@@ -1,21 +1,23 @@
-import React from 'react';
 import Comment from './Comment';
 import { IPostDocument } from '@/models/post.model';
 import { ICommentDocument } from '@/models/comment.model';
 
-interface CommentsProps {
-  post: IPostDocument & { comments?: ICommentDocument[] };
-}
+const Comments = ({ post }: { post: IPostDocument }) => {
+  // Ensure comments always exist as an array safely
+  const comments = post?.comments ?? [];
 
-const Comments: React.FC<CommentsProps> = ({ post }) => {
   return (
     <div>
-      {(post.comments ?? []).map((comment) => {
-        if (!comment || !comment._id) return null; // skip invalid comments
-        return <Comment key={comment._id.toString()} comment={comment} />;
-      })}
+      {comments.length > 0 ? (
+        comments.map((comment) => (
+          <Comment key={comment._id} comment={comment} />
+        ))
+      ) : (
+        <p>No comments available</p>
+      )}
     </div>
   );
 };
 
 export default Comments;
+
