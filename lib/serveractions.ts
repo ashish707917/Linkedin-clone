@@ -89,33 +89,36 @@ export const deletePostAction = async (postId: string) => {
 }
 
 export const createCommentAction = async (postId: string, formData: FormData) => {
-    try {
-        const user = await currentUser();
-        if (!user) throw new Error("User not authenticated");
-        const inputText = formData.get('inputText') as string;
-        if (!inputText) throw new Error("Field is required");
-        if (!postId) throw new Error("Post id required");
+  try {
+    const user = await currentUser();
+    if (!user) throw new Error("User not authenticated");
 
-        const userDatabase: IUser = {
-            _id: user.id,                    // Added _id here too
-            firstName: user.firstName || "Patel",
-            lastName: user.lastName || "Mern Stack",
-            userId: user.id,
-            ProfilePhoto: user.imageUrl
-        }
-        const post = await Post.findById({ _id: postId });
-        if (!post) throw new Error('Post not found');
+    const inputText = formData.get('inputText') as string;
+    if (!inputText) throw new Error("Field is required");
+    if (!postId) throw new Error("Post id required");
 
-        const comment = await Comment.create({
-            textMessage: inputText,
-            user: userDatabase,
-        }) ;
+    const userDatabase: IUser = {
+      _id: user.id,
+      firstName: user.firstName || "Patel",
+      lastName: user.lastName || "Mern Stack",
+      userId: user.id,
+      ProfilePhoto: user.imageUrl
+    };
 
-        post.comments?.push(comment._id as Types.ObjectId);
-        await post.save()
+    const post = await Post.findById(postId);
+    if (!post) throw new Error('Post not found');
 
-        revalidatePath("/");
-    } catch (error) {
-        throw error;
-    }
-} 
+    const comment = await Comment.create({
+      textMessage: inputText,
+      user: userDatabase,
+    });
+
+    post.comments?.push(comment._id as Types.ObjectId);
+    await post.save();
+
+    revalidatePath("/");
+
+  } catch (error) {
+    throw error;
+  }
+};
