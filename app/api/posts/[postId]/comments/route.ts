@@ -9,7 +9,9 @@ export async function GET(
   try {
     await connectDB();
 
-    const post = await Post.findById(params.postId);
+    const postId = params.postId;
+
+    const post = await Post.findById(postId);
     if (!post) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
@@ -20,7 +22,11 @@ export async function GET(
     });
 
     return NextResponse.json(populatedPost);
-  } catch {
-    return NextResponse.json({ error: "An error occurred." }, { status: 500 });
+  } catch (err) {
+    console.error("Error fetching comments:", err);
+    return NextResponse.json(
+      { error: "An error occurred while fetching comments." },
+      { status: 500 }
+    );
   }
 }

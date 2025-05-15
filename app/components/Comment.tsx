@@ -6,7 +6,7 @@ const Comment = ({comment} : {comment:ICommentDocument}) => {
   return (
     <div className='flex gap-2 my-4'>
       <div className='mt-2'>
-        <ProfilePhoto src={comment.user.ProfilePhoto!}/>
+        <ProfilePhoto src={comment?.user?.ProfilePhoto!}/>
 
       </div>
       <div className='flex flex-1 justify-between p-3 bg-[#F2F2F2]'>
