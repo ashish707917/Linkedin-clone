@@ -10,7 +10,7 @@ export const GET = async (req: NextRequest, context: { params: { postId: string 
     if (!post) return NextResponse.json({ error: "Post not found." }, { status: 404 });
     return NextResponse.json(post.likes);
   } catch (error) {
-    return NextResponse.json({ error: "An error occurred." }, { status: 500 });
+    throw error;
   }
 };
  export const POST = async (req: NextRequest, context: { params: { postId: string } }) => {
@@ -23,6 +23,6 @@ export const GET = async (req: NextRequest, context: { params: { postId: string 
     await post.updateOne({ $addToSet: { likes: userId } });
     return NextResponse.json({ message: "Post liked successfully." });
   } catch (error) {
-    return NextResponse.json({ error: "An error occurred." }, { status: 500 });
+    throw error;
   }
 };

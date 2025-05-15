@@ -16,6 +16,6 @@ export const GET = async (req: NextRequest, { params }: { params: { postId: stri
 
     return NextResponse.json(post.comments);
   } catch (error) {
-    return NextResponse.json({ error: "An error occurred." }, { status: 500 });
+    throw error;
   }
 };

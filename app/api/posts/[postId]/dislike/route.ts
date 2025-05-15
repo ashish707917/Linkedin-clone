@@ -16,7 +16,7 @@ export const POST = async (req: NextRequest, context: { params: { postId: string
 
     return NextResponse.json({ message: "Post disliked successfully." });
   } catch (error) {
-    return NextResponse.json({ error: "An error occurred." }, { status: 500 });
+    throw error;
   }
 };
 
