@@ -2,7 +2,7 @@ import { ICommentDocument } from '@/models/comment.model'
 import React from 'react'
 import ProfilePhoto from './ProfilePhoto'
 import ReactTimeago from 'react-timeago'
-const Comment = ({comment} : {comment:ICommentDocument}) => {
+const Comment = ({comment} : {comment:any}) => {
   return (
     <div className='flex gap-2 my-4'>
       <div className='mt-2'>

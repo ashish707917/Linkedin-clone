@@ -1,23 +1,18 @@
-import Comment from './Comment';
-import { IPostDocument } from '@/models/post.model';
-import { ICommentDocument } from '@/models/comment.model';
-
-const Comments = ({ post }: { post: IPostDocument }) => {
-  // Ensure comments always exist as an array safely
-  const comments = post?.comments ?? [];
-
+import { IPostDocument } from '@/models/post.model'
+import React from 'react'
+import Comment from './Comment' 
+const Comments = ({post}:{post:IPostDocument}) => {
   return (
-    <div>
-      {comments.length > 0 ? (
-        comments.map((comment) => (
-          <Comment key={comment._id} comment={comment} />
-        ))
-      ) : (
-        <p>No comments available</p>
-      )}
+    <div> 
+        {
+            post?.comments?.map((comment: any)=>{
+                return (
+                    <Comment key={comment._id} comment={comment}/>
+                )
+            })
+        } 
     </div>
-  );
-};
+  )
+}
 
-export default Comments;
-
+export default Comments

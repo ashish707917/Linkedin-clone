@@ -2,31 +2,19 @@ import connectDB from "@/lib/db";
 import { Post } from "@/models/post.model";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { postId: string } }
-) {
-  try {
-    await connectDB();
+// fetch all comments
+export const GET = async (req:NextRequest, {params}:{params:{postId:string}}) => {
+    try {
+        await connectDB();
+        const post = Post.findById({_id:params.postId});
+        if(!post) return NextResponse.json({error:"Post not found."});
 
-    const postId = params.postId;
-
-    const post = await Post.findById(postId);
-    if (!post) {
-      return NextResponse.json({ error: "Post not found" }, { status: 404 });
+        const comments = await post.populate({
+            path:'comments',
+            options:{sort:{createdAt:-1}},
+        });
+        return NextResponse.json(comments);
+    } catch (error) {
+        return NextResponse.json({error:'an error occurred.'});
     }
-
-    const populatedPost = await post.populate({
-      path: "comments",
-      options: { sort: { createdAt: -1 } },
-    });
-
-    return NextResponse.json(populatedPost);
-  } catch (err) {
-    console.error("Error fetching comments:", err);
-    return NextResponse.json(
-      { error: "An error occurred while fetching comments." },
-      { status: 500 }
-    );
-  }
 }
