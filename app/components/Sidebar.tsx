@@ -1,61 +1,68 @@
-'use client'
-
-import Image from 'next/image'
-import React from 'react'
-import ProfilePhoto from './ProfilePhoto'
+import Image from "next/image";
+import React from "react";
+import { getAllPosts } from "@/lib/serveractions";
+import ProfilePhoto from "./ProfilePhoto";
 
 type User = {
-  imageUrl?: string
-  username?: string
-}
+  id: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  imageUrl?: string | null;
+  username?: string | null;
+};
 
-const Sidebar = ({ user }: { user: User }) => {
+type Post = {
+  // Define the shape of your Post object here.
+  // For example:
+  id: string;
+  title: string;
+  content: string;
+  createdAt: string;
+  // Add other properties as needed
+};
+
+const Sidebar = async ({ user }: { user: User | null }) => {
+  // Fetch posts - assuming getAllPosts returns Post[]
+  const posts: Post[] = await getAllPosts();
+
   return (
-    <div className='hidden md:block w-[20%] h-fit border border-gray-300 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200'>
-      <div className='flex flex-col items-center'>
-
-        {/* Banner */}
-        <div className='w-full h-16 overflow-hidden'>
+    <div className="hidden md:block w-[20%] h-fit border bordergray-300 bg-white rounded-lg">
+      <div className="flex relative flex-col items-center">
+        <div className="w-full h-16 overflow-hidden">
           {user && (
             <Image
-              src="/banner.webp"
+              src={"/banner.jpg"}
               alt="Banner"
               width={200}
               height={200}
-              className='w-full h-full rounded-t'
+              className="w-full h-full rounded-t"
             />
           )}
         </div>
-
-        {/* Profile Photo */}
-        <div className='-mt-6 flex justify-center'>
-          <ProfilePhoto src={user?.imageUrl || "/banner.webp"} />
+        <div className="my-1 absolute top-10 left-[40%]">
+          <ProfilePhoto src={user?.imageUrl ?? "/banner.jpg"} />
         </div>
-
-        {/* User Info */}
-        <div className='border-b border-b-gray-300 w-full'>
-          <div className='p-2 mt-5 text-center'>
-            <h1 className='font-bold text-[15px] hover:underline cursor-pointer'>
-              {user?.username || 'krishna mern stack'}
+        <div className="border-b border-b-gray-300">
+          <div className="p-2 mt-5 text-center">
+            <h1 className="font-bold hover:underline cursor-pointer">
+              {user ? `${user.firstName ?? ""} ${user.lastName ?? ""}` : "Patel Mern Stack"}
             </h1>
+            <p className="text-xs">@{user?.username ?? "username"}</p>
           </div>
         </div>
-
-        {/* Stats */}
-        <div className='text-xs w-full'>
-          <div className='flex justify-between items-center px-3 py-2 hover:bg-gray-100 cursor-pointer'>
-            <p className='text-gray-600'>Post Impressions</p>
-            <p className='text-blue-500 font-semibold text-sm'>88</p>
-          </div>
-          <div className='flex justify-between items-center px-3 py-2 hover:bg-gray-100 cursor-pointer'>
-            <p className='text-gray-600'>Posts</p>
-            <p className='text-blue-500 font-semibold text-sm'>1</p>
-          </div>
+      </div>
+      <div className="text-xs">
+        <div className="w-full flex justify-between items-center px-3 py-2 hover:bg-gray-200 cursor-pointer">
+          <p>Post Impression</p>
+          <p className="text-blue-500 font-bold">88</p>
         </div>
-
+        <div className="w-full flex justify-between items-center px-3 py-2 hover:bg-gray-200 cursor-pointer">
+          <p>Posts</p>
+          <p className="text-blue-500 font-bold">{posts.length}</p>
+        </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;
