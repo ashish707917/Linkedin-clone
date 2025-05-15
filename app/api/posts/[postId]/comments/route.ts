@@ -2,10 +2,10 @@ import connectDB from "@/lib/db";
 import { Post } from "@/models/post.model";
 import { NextRequest, NextResponse } from "next/server";
 
-export const GET = async (
+export async function GET(
   req: NextRequest,
   { params }: { params: { postId: string } }
-) => {
+) {
   try {
     await connectDB();
 
@@ -23,4 +23,4 @@ export const GET = async (
   } catch {
     return NextResponse.json({ error: "An error occurred." }, { status: 500 });
   }
-};
+}
