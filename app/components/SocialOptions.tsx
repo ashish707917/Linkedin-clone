@@ -4,7 +4,6 @@ import { useUser } from '@clerk/nextjs';
 import { MessageCircleMore, Repeat, Send, ThumbsUp } from 'lucide-react';
 import React, { useState } from 'react';
 import CommentInput from './CommentInput';
-import Comment from './Comment';
 import Comments from './Comments';
 
 const SocialOptions = ({ post }: { post: IPostDocument }) => {
@@ -89,7 +88,7 @@ const SocialOptions = ({ post }: { post: IPostDocument }) => {
 
       {commentOpen && (
         <div className="p-4">
-          <CommentInput postId={post._id} />
+          <CommentInput postId={post._id.toString()} />
           <Comments post ={post} />
         </div>
       )}

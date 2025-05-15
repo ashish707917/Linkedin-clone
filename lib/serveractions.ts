@@ -6,7 +6,7 @@ import { currentUser } from "@clerk/nextjs/server"
 import { v2 as cloudinary } from 'cloudinary';
 import connectDB from "./db";
 import { revalidatePath } from "next/cache";
-import { Comment, ICommentDocument } from "@/models/comment.model";
+import { Comment } from "@/models/comment.model";
 import { Types } from "mongoose";
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
@@ -49,8 +49,8 @@ export const createPostAction = async (inputText: string, selectedFile: string) 
             })
         }
         revalidatePath("/");
-    } catch (error: any) {
-        throw new Error(error);
+    } catch (error) {
+        throw error;
     }
 }
 
@@ -83,8 +83,8 @@ export const deletePostAction = async (postId: string) => {
     try {
         await Post.deleteOne({ _id: postId });
         revalidatePath("/");
-    } catch (error: any) {
-        throw new Error('An error occurred', error);
+    } catch (error) {
+        throw error;
     }
 }
 
