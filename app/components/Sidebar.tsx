@@ -3,9 +3,13 @@
 import Image from 'next/image'
 import React from 'react'
 import ProfilePhoto from './ProfilePhoto'
-import { getAllPosts } from '@/lib/serveractions'
 
-const Sidebar =  ({ user }: { user: any }) => {
+type User = {
+  imageUrl?: string
+  username?: string
+}
+
+const Sidebar = ({ user }: { user: User }) => {
   return (
     <div className='hidden md:block w-[20%] h-fit border border-gray-300 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200'>
       <div className='flex flex-col items-center'>
@@ -25,14 +29,14 @@ const Sidebar =  ({ user }: { user: any }) => {
 
         {/* Profile Photo */}
         <div className='-mt-6 flex justify-center'>
-          <ProfilePhoto src={user ?  user?.imageUrl! :"/banner.webp"} />
+          <ProfilePhoto src={user?.imageUrl || "/banner.webp"} />
         </div>
 
         {/* User Info */}
         <div className='border-b border-b-gray-300 w-full'>
           <div className='p-2 mt-5 text-center'>
             <h1 className='font-bold text-[15px] hover:underline cursor-pointer'>
-              {user ? user.username : 'krishna mern stack'}
+              {user?.username || 'krishna mern stack'}
             </h1>
           </div>
         </div>
@@ -55,4 +59,3 @@ const Sidebar =  ({ user }: { user: any }) => {
 }
 
 export default Sidebar
-
