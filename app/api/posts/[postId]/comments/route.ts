@@ -3,7 +3,11 @@ import { Post } from "@/models/post.model";
 import { NextRequest, NextResponse } from "next/server";
 
 // Get all comments for a post, sorted by createdAt descending
-export const GET = async (req: NextRequest, { params }: { params: { postId: string } }) => {
+export const GET = async (req: NextRequest, context: { params: { postId: string } }) => {
+  const { params } = context;
+  // or
+  // const postId = context.params.postId;
+
   try {
     await connectDB();
     const post = await Post.findById(params.postId);
